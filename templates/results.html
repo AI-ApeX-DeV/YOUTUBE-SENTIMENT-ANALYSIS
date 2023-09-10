@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+</head>
+<body>
+    <h1>Search Results</h1>
+
+    {% if top_videos %}
+    <ul>
+        {% for video in top_videos %}
+        <li>
+            <h2>{{ loop.index }}. {{ video['title'] }} - Score: {{ video['score']|round(2) }}</h2>
+            <h3>Sentiment Analysis of Comments:</h3>
+            <p>{{ video['senti_dict'] }}</p>
+            <h3>Sentiment Labels and Scores:</h3>
+            <ul class="sentiments">
+                {% for label, score in video['senti_class'] %}
+                <li>{{ label }}: {{ score|round(2) }}</li>
+                {% endfor %}
+            </ul>
+            <h3>Top 20 Comments Merged Together:</h3>
+            <p>{{ video['comments'] }}</p>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No results found.</p>
+    {% endif %}
+
+    <a href="/">Back to Search</a>
+</body>
+</html>

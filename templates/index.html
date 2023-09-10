@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Web App</title>
+</head>
+<body>
+    <h1>Student Web App</h1>
+    <form method="POST">
+        <label for="user_input">Enter a Wikipedia page title:</label>
+        <input type="text" name="user_input" id="user_input" required>
+        <button type="submit">Submit</button>
+    </form>
+    {% if result %}
+    <div>
+        <p>{{ result }}</p>
+    </div>
+    {% endif %}
+    
+    {% if content %}
+    <div>
+        <h2>Wikipedia Content:</h2>
+        <p>{{ content }}</p>
+    </div>
+    {% endif %}
+
+    {% if images %}
+    <div>
+        <h2>Images:</h2>
+        <ul>
+            {% for image in images %}
+            <li><img src="{{ image }}" alt="Image"></li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    
+    {% if videos %}
+    <div>
+        <h2>Videos:</h2>
+        <ul>
+            {% for video in videos %}
+            <li><iframe width="560" height="315" src="{{ video }}" frameborder="0" allowfullscreen></iframe></li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</body>
+</html>
