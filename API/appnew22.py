@@ -94,8 +94,8 @@ def index():
 
         for i, (video_id, data) in enumerate(sorted_videos[:30], start=1):
             video_info = youtube.videos().list(
-            id=video_id,
-            part="snippet"
+                id=video_id,
+                part="snippet"
             ).execute()
             title = video_info['items'][0]['snippet']['title']
 
@@ -119,8 +119,7 @@ def index():
                 'score': data['score'],
                 'comments': text,
                 'senti_dict': x,
-                'senti_class': y,
-                'video_id': video_id
+                'senti_class': y
             })
 
         return render_template('results.html', top_videos=top_videos)

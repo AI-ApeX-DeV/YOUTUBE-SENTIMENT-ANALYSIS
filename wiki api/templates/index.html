@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Web App</title>
+    <style>
+        /* Add your CSS styles here */
+        .content {
+            margin-top: 20px;
+        }
+        .images {
+            margin-top: 20px;
+        }
+        .pdf-button {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Student Web App</h1>
+    <form method="POST">
+        <label for="user_input">Enter a Wikipedia page title:</label>
+        <input type="text" name="user_input" id="user_input" required>
+        <button type="submit">Submit</button>
+    </form>
+    
+    {% if result %}
+    <div>
+        <p>{{ result }}</p>
+    </div>
+    {% endif %}
+    
+    {% if content %}
+    <div class="content">
+        <h2>Wikipedia Content:</h2>
+        <p>{{ content }}</p>
+        <form method="POST" action="/download_pdf">
+            <input type="hidden" name="content" value="{{ content }}">
+            <button class="pdf-button" type="submit">Download as PDF</button>
+        </form>
+    </div>
+    {% endif %}
+    
+    {% if images %}
+    <div class="images">
+        <h2>Images:</h2>
+        <ul>
+            {% for image in images %}
+            <li><img src="{{ image }}" alt="Image"></li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</body>
+</html>

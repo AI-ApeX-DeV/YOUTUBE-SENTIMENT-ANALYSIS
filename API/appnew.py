@@ -11,7 +11,6 @@ HUGGINGFACE_API = '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'
 headers = {"Authorization": "Bearer " + HUGGINGFACE_API}
 API_URL = "https://api-inference.huggingface.co/models/j-hartmann/emotion-english-distilroberta-base"
 
-
 def query(payload):
     response = requests.post(API_URL, headers=headers, json=payload)
     return response.json()
@@ -30,9 +29,10 @@ def senti_class(text):
     labels = [item['label'] for item in output[0]]
     scores = [item['score'] for item in output[0]]
 
-    senti_data = [(label, score) for label, score in zip(labels, scores)]
-    
-    return senti_data
+    tx = ""
+    for label, score in zip(labels, scores):
+        tx = tx + label + " : " + str(score) + "\n"
+    return tx
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -46,7 +46,7 @@ def index():
             q=user_prompt,
             type="video",
             part="id",
-            maxResults=7
+            maxResults=5
         ).execute()
 
         video_ids = [item['id']['videoId'] for item in search_response['items']]
@@ -85,49 +85,44 @@ def index():
                 'comments': comments
             }
 
-            # ... (rest of your code for processing videos and comments)
-
         # Sort videos by score in descending order
         sorted_videos = sorted(video_data.items(), key=lambda x: x[1]['score'], reverse=True)
 
-        top_videos = []
 
+        print("Top 30 Videos:")
         for i, (video_id, data) in enumerate(sorted_videos[:30], start=1):
             video_info = youtube.videos().list(
-            id=video_id,
-            part="snippet"
+                id=video_id,
+                part="snippet"
             ).execute()
             title = video_info['items'][0]['snippet']['title']
-
-            # Perform sentiment analysis and error handling
-            text = data['comments']
+            
+            print(f"{i}. {title} - Score: {data['score']:.2f}")
+            
+            # Print the concatenated comments for this video
+            print('\n')
+            print('\n')
+            print('SENTIMENT ANALYSIS OF COMMENTS : ')
+            text=data['comments']
 
             try:
                 words = text.split()
                 selected_words = words[:200]
                 words = ' '.join(selected_words)
-                x = senti(words)
-                y = senti_class(words)
-            except Exception as e:
-                print("Error:", str(e))
-                x = "Sentiment analysis error"
-                y = "Sentiment analysis error"
+                x=senti(words)
+                y=senti_class(words)
+            except: 
+                print("ERROR ERROR ERROR")
+            print("\n\n TOP 20 COMMENTS MERGED TOGETHER :")  
 
-            # Append the data to the top_videos list
-            top_videos.append({
-                'title': title,
-                'score': data['score'],
-                'comments': text,
-                'senti_dict': x,
-                'senti_class': y,
-                'video_id': video_id
-            })
+            sorted_videos=text+x+y
+            
+            enumerated_videos = list(enumerate(sorted_videos[:30], start=1))
 
-        return render_template('results.html', top_videos=top_videos)
+            return render_template('results.html', enumerated_videos=enumerated_videos)
+
 
     return render_template('index2.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-

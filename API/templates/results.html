@@ -13,10 +13,6 @@
         {% for video in top_videos %}
         <li>
             <h2>{{ loop.index }}. {{ video['title'] }} - Score: {{ video['score']|round(2) }}</h2>
-            
-            <!-- Embedded YouTube Video -->
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ video['video_id'] }}" frameborder="0" allowfullscreen></iframe>
-            
             <h3>Sentiment Analysis of Comments:</h3>
             <p>{{ video['senti_dict'] }}</p>
             <h3>Sentiment Labels and Scores:</h3>

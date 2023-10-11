@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Web App</title>
+</head>
+<body>
+    <h1>Student Web App</h1>
+    <form method="POST">
+        <label for="user_input">Enter a Wikipedia page title:</label>
+        <input type="text" name="user_input" id="user_input" required>
+        <button type="submit">Submit</button>
+    </form>
+    
+    {% if result %}
+    <div>
+        <p>{{ result }}</p>
+    </div>
+    {% endif %}
+    
+    {% if content %}
+    <div>
+        <h2>Wikipedia Content:</h2>
+        <p>{{ content }}</p>
+        <form method="POST" action="/download_pdf">
+            <input type="hidden" name="content" value="{{ content }}">
+            <input type="hidden" name="images" value="{{ images|join(',') }}">
+            <button type="submit">Download eBook (PDF)</button>
+        </form>
+    </div>
+    {% endif %}
+</body>
+</html>
